@@ -36,12 +36,19 @@ namespace CognitiveExample.Web.Services
 
         private IEnumerable<Feelings> GetFeelings(MultiLanguageBatchInput batchInput)
         {
+            AnalysisResults analysis = new AnalysisResults();
             IList<Feelings> listOfFeelings = new List<Feelings>();
-            var analysis = new AnalysisResults
+            try
             {
-                KeyPhrases = _textAnalyticsAPI.KeyPhrases(batchInput),
-                Sentiments = _textAnalyticsAPI.Sentiment(batchInput)
-            };
+                analysis.KeyPhrases = _textAnalyticsAPI.KeyPhrases(batchInput);
+                analysis.Sentiments = _textAnalyticsAPI.Sentiment(batchInput);
+
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
 
 
             foreach(var keyPhrase in analysis.KeyPhrases.Documents)

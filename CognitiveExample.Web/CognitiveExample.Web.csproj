@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Services\Exceptions\" />
+    <Folder Include="ViewModel\Home\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

@@ -1,0 +1,76 @@
+﻿@using CognitiveExample.Web.Models.CognitiveEntities
+@model AnalysisViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            @*<h1>@Model.Name</h1>*@
+            <h2>@Model.Name - @Model.Username</h2>
+        </div>
+        <div class="col-md-3">
+            <img src="@Model.ProfileImageUrl" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+            <h3>Feelings based on latest tweets</h3>
+        </div>
+    </div>
+
+    <div class="panel panel-success">
+        <div class="panel-heading">Positive</div>
+        <div class="panel-body">
+            @if (Model.Feelings.Count() != 0)
+            {
+                @foreach (var feeling in Model.Feelings)
+                {
+                    @foreach (var thing in feeling.ThingFeltFor)
+                    {
+                        @if (feeling.AttitudeTowards.Equals(Attitude.Positive))
+                        {
+                            <div>
+                                @thing 
+                            </div>
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+                <div>
+                    This user has no positive tweets.
+                </div>
+            }
+        </div>
+    </div>
+
+
+    <div class="panel panel-danger">
+        <div class="panel-heading">Negative</div>
+        <div class="panel-body">
+            @if (Model.Feelings.Count() != 0)
+            {
+                @foreach (var feeling in Model.Feelings)
+                {
+                    @foreach (var thing in feeling.ThingFeltFor)
+                    {
+                        @if (feeling.AttitudeTowards.Equals(Attitude.Negative))
+                        {
+                            <div>
+                                @thing 
+                            </div>
+                        }
+                    }
+                }
+            }
+            else
+            {
+                <div>
+                    This user has no negative tweets.
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CognitiveExample.Web.ViewModel
 {
-    public class IndexViewModel
+    public class QueryUserViewModel
     {
         public string TwitterHandle { get; set; }
     }
