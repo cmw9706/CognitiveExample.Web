@@ -9,5 +9,6 @@ namespace CognitiveExample.Web.Models.CognitiveEntities
     {
         public ICollection<string> ThingFeltFor { get; set; }
         public Attitude AttitudeTowards { get; set; }
+        public string Tweet { get; set; }
     }
 }

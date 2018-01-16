@@ -77,6 +77,42 @@ namespace CognitiveExample.Web.Services
             return listOfTweets;
         }
 
+        public IEnumerable<string> GetMentionsByUser(string username)
+        {
+            List<string> listOfTweets = new List<string>();
+            HttpWebRequest getMentions = CreateMentionsGet(username);
+            try
+            {
+                string responseBody = string.Empty;
+                using (var response = getMentions.GetResponse().GetResponseStream())//there request sends
+                {
+                    var responseReader = new StreamReader(response);
+                    responseBody = responseReader.ReadToEnd();
+                }
+
+                MentionTweets tweets = JsonConvert.DeserializeObject<MentionTweets>(responseBody);
+
+                foreach (var tweet in tweets.Tweets)
+                {
+                    listOfTweets.Add(tweet.Text);
+                }
+            }
+            catch (Exception ex) //401 (access token invalid or expired)
+            {
+                //TODO
+            }
+
+            return listOfTweets;
+        }
+
+        private HttpWebRequest CreateMentionsGet(string username)
+        {
+            var getRequest = WebRequest.Create(_apiOptions.SearchHandlesEndpoint + "?q=@" + username + "&count=" + _apiOptions.TweetGetCount) as HttpWebRequest;
+            getRequest.Method = "GET";
+            getRequest.Headers[HttpRequestHeader.Authorization] = "Bearer " + _authToken.AccessToken;
+            return getRequest;
+        }
+
         public TwitterUser GetUserInformation(string username)
         {
             HttpWebRequest getUserInfo = CreateUserInfoGet(username);
@@ -109,7 +145,7 @@ namespace CognitiveExample.Web.Services
 
         private HttpWebRequest CreateTweetsGet(string username)
         {
-            var getRequest = WebRequest.Create(_apiOptions.UserTimelineGetEndpoint + "?count="+_apiOptions.TweetGetCount+"&screen_name="+username+"&include_rts="+_apiOptions.IncludeRetweets) as HttpWebRequest;
+            var getRequest = WebRequest.Create(_apiOptions.UserTimelineGetEndpoint + "?count="+_apiOptions.TweetGetCount+"&screen_name="+username+"&include_rts="+_apiOptions.IncludeRetweets+ "exclude_replies="+_apiOptions.ExcludeReplies) as HttpWebRequest;
             getRequest.Method = "GET";
             getRequest.Headers[HttpRequestHeader.Authorization] = "Bearer " + _authToken.AccessToken;
             return getRequest;

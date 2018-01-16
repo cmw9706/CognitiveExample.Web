@@ -15,19 +15,23 @@ namespace CognitiveExample.Web.Services
         private ITextAnalyticsAPI _textAnalyticsAPI;
         private ILogger<TextAnalysisService> _logger;
         private string _language = "en";
+        private IDictionary<string, string> _tweetDictionary;
 
-        public TextAnalysisService(TextAnalyticsAPI textAnalyticsAPI, ILogger<TextAnalysisService> logger)
+        public TextAnalysisService(TextAnalyticsAPI textAnalyticsAPI, ILogger<TextAnalysisService> logger, IDictionary<string, string> tweetDictionary)
         {
             _textAnalyticsAPI = textAnalyticsAPI;
             _logger = logger;
+            _tweetDictionary = tweetDictionary;
         }
 
         public IEnumerable<Feelings> AnalyzeTweets(IEnumerable<string> tweets)
         {
+            
             var tweetInputs = new List<MultiLanguageInput>();
             for(int i = 0;i < tweets.Count(); i++)
             {
                 tweetInputs.Add(new MultiLanguageInput {Language = _language, Id = i.ToString(),Text = tweets.ToList()[i] });
+                _tweetDictionary.Add(i.ToString(), tweets.ToList()[i]);
             }
             MultiLanguageBatchInput batchInput = new MultiLanguageBatchInput(tweetInputs);
 
@@ -53,14 +57,24 @@ namespace CognitiveExample.Web.Services
 
             foreach(var keyPhrase in analysis.KeyPhrases.Documents)
             {
+                string tweet = string.Empty;
                 var sentiment = analysis.Sentiments.Documents.Where(s => s.Id == keyPhrase.Id).FirstOrDefault();
+                if(_tweetDictionary.TryGetValue(keyPhrase.Id, out string value))
+                {
+                    tweet = value;
+                }
+                else
+                {
+                    throw new Exception("Could not map tweet to output id");
+                }
 
                 if (IsSignificant(sentiment.Score) && !keyPhrase.KeyPhrases.Count().Equals(0))
                 {
                     Feelings feeling = new Feelings
                     {
                         ThingFeltFor = keyPhrase.KeyPhrases,
-                        AttitudeTowards = DeriveAttitude(sentiment.Score)
+                        AttitudeTowards = DeriveAttitude(sentiment.Score),
+                        Tweet = tweet
                     };
                     listOfFeelings.Add(feeling);
                 }

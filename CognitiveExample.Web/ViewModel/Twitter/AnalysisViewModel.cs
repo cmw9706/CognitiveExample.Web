@@ -1,4 +1,5 @@
 ﻿using CognitiveExample.Web.Models.CognitiveEntities;
+using CognitiveExample.Web.Models.TwitterEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

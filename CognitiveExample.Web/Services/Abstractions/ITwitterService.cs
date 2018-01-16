@@ -11,6 +11,7 @@ namespace CognitiveExample.Web.Services.Abstractions
     {
         void GetAuthToken();
         IEnumerable<string> GetTweetsByUser(string username);
+        IEnumerable<string> GetMentionsByUser(string username);
         TwitterUser GetUserInformation(string username);
     }
 }

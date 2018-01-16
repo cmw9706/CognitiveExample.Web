@@ -27,21 +27,24 @@ namespace CognitiveExample.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Analysis(QueryUserViewModel indexViewModel)
+        public IActionResult Analysis(QueryUserViewModel queryUserViewModel)
         {
-            var user = _twitterService.GetUserInformation(indexViewModel.TwitterHandle);
-            var model = new AnalysisViewModel
-            {
-                Name = user.Name,
-                Username = user.Username,
-                ProfileImageUrl = user.ProfilePictureUrl
-            };
+            var user = _twitterService.GetUserInformation(queryUserViewModel.TwitterHandle);
+
 
             if (!object.ReferenceEquals(null, user))
             {
+                var model = new AnalysisViewModel
+                {
+                    Name = user.Name,
+                    Username = user.Username,
+                    ProfileImageUrl = user.ProfilePictureUrl
+                };
+
                 if (ModelState.IsValid)
                 {
                     var tweets = _twitterService.GetTweetsByUser(user.Username);
+
                     if (tweets.Count() != 0)
                     {
                         try
@@ -49,6 +52,52 @@ namespace CognitiveExample.Web.Controllers
                             model.Feelings = _textAnalysis.AnalyzeTweets(tweets);
                         }
                         catch(Exception ex)
+                        {
+                            throw ex;
+                        }
+                    }
+                    else
+                    {
+                        model.Feelings = new List<Feelings>();
+                    }
+
+                    return View(model);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Mentions(QueryUserViewModel queryUserViewModel)
+        {
+            var user = _twitterService.GetUserInformation(queryUserViewModel.TwitterHandle);
+
+            if (!object.ReferenceEquals(null, user))
+            {
+                var model = new AnalysisViewModel
+                {
+                    Name = user.Name,
+                    Username = user.Username,
+                    ProfileImageUrl = user.ProfilePictureUrl
+                };
+                if (ModelState.IsValid)
+                {
+                    var tweets = _twitterService.GetMentionsByUser(user.Username);
+
+                    if (tweets.Count() != 0)
+                    {
+                        try
+                        {
+                            model.Feelings = _textAnalysis.AnalyzeTweets(tweets);
+                        }
+                        catch (Exception ex)
                         {
                             throw ex;
                         }

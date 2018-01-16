@@ -44,6 +44,7 @@ namespace CognitiveExample.Web
 
             services.AddSingleton(GetTextAnalyticsApi(textApiSettings));
 
+            services.AddTransient<IDictionary<string, string>, TweetDictionary>();
             services.AddTransient<ITextAnalysis, TextAnalysisService>();
             services.AddSingleton<ITwitterService, TwitterService>();
         }
