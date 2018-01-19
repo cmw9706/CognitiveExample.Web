@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using CognitiveExample.Web.ViewModel;
 using CognitiveExample.Web.Services.Abstractions;
 using CognitiveExample.Web.Models.CognitiveEntities;
+using System.Net;
+using Microsoft.Extensions.Logging;
 
 namespace CognitiveExample.Web.Controllers
 {
@@ -13,12 +15,15 @@ namespace CognitiveExample.Web.Controllers
     {
         private ITwitterService _twitterService;
         private ITextAnalysis _textAnalysis;
+        private ILogger<TwitterController> _logger;
 
-        public TwitterController(ITwitterService twitterService, ITextAnalysis textAnalysis)
+        public TwitterController(ITwitterService twitterService, ITextAnalysis textAnalysis, ILogger<TwitterController> logger)
         {
             _twitterService = twitterService;
             _textAnalysis = textAnalysis;
+            _logger = logger;
         }
+
         public IActionResult QueryUser()
         {
             _twitterService.GetAuthToken();
@@ -43,9 +48,9 @@ namespace CognitiveExample.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var tweets = _twitterService.GetTweetsByUser(user.Username);
+                    var tweets = _twitterService.GetTweetsByUserAsync(user.Username).Result;
 
-                    if (tweets.Count() != 0)
+                    if (tweets.ToList().Count() != 0)
                     {
                         try
                         {
@@ -87,11 +92,12 @@ namespace CognitiveExample.Web.Controllers
                     Username = user.Username,
                     ProfileImageUrl = user.ProfilePictureUrl
                 };
+
                 if (ModelState.IsValid)
                 {
-                    var tweets = _twitterService.GetMentionsByUser(user.Username);
+                    var tweets = _twitterService.GetMentionsByUserAsync(user.Username).Result;
 
-                    if (tweets.Count() != 0)
+                    if (tweets.ToList().Count() != 0)
                     {
                         try
                         {
@@ -99,6 +105,7 @@ namespace CognitiveExample.Web.Controllers
                         }
                         catch (Exception ex)
                         {
+                            _logger.LogError(ex, "Failure to extract sentiments from text");
                             throw ex;
                         }
                     }

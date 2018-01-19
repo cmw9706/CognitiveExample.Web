@@ -49,68 +49,56 @@ namespace CognitiveExample.Web.Services
             }
         }
 
-        public IEnumerable<string> GetTweetsByUser(string username)
+        public async Task<IEnumerable<string>> GetTweetsByUserAsync(string username)
         {
-            List<string> listOfTweets = new List<string>();
             HttpWebRequest getTimeline = CreateTweetsGet(username);
             try
             {
-                string responseBody = string.Empty;
-                using (var response = getTimeline.GetResponse().GetResponseStream())//there request sends
-                {
-                    var responseReader = new StreamReader(response);
-                    responseBody = responseReader.ReadToEnd();
-                }
-
-                IList<Tweet> tweets = JsonConvert.DeserializeObject<List<Tweet>>(responseBody);
-
+                List<string> listOfTweets = new List<string>();
+                var response = await ExecuteGetListOfTweetsAsync(getTimeline);
+                var tweets = JsonConvert.DeserializeObject<List<Tweet>>(response);
                 foreach (var tweet in tweets)
                 {
                     listOfTweets.Add(tweet.Text);
                 }
+                return listOfTweets;
             }
             catch(Exception ex) //401 (access token invalid or expired)
             {
-                //TODO
+                throw ex;
             }
-
-            return listOfTweets;
         }
 
-        public IEnumerable<string> GetMentionsByUser(string username)
+        public async Task<IEnumerable<string>> GetMentionsByUserAsync(string username)
         {
-            List<string> listOfTweets = new List<string>();
+            
             HttpWebRequest getMentions = CreateMentionsGet(username);
             try
             {
-                string responseBody = string.Empty;
-                using (var response = getMentions.GetResponse().GetResponseStream())//there request sends
-                {
-                    var responseReader = new StreamReader(response);
-                    responseBody = responseReader.ReadToEnd();
-                }
-
-                MentionTweets tweets = JsonConvert.DeserializeObject<MentionTweets>(responseBody);
-
-                foreach (var tweet in tweets.Tweets)
+                List<string> listOfTweets = new List<string>();
+                var response = await ExecuteGetListOfTweetsAsync(getMentions);
+                var tweets = JsonConvert.DeserializeObject<MentionTweets>(response);
+                foreach(var tweet in tweets.Tweets)
                 {
                     listOfTweets.Add(tweet.Text);
                 }
+                return listOfTweets;
             }
             catch (Exception ex) //401 (access token invalid or expired)
             {
-                //TODO
+                throw ex;
             }
-
-            return listOfTweets;
         }
 
-        private HttpWebRequest CreateMentionsGet(string username)
+        private static async Task<string> ExecuteGetListOfTweetsAsync(HttpWebRequest getList)
         {
-            var getRequest = WebRequest.Create(_apiOptions.SearchHandlesEndpoint + "?q=@" + username + "&count=" + _apiOptions.TweetGetCount) as HttpWebRequest;
-            getRequest.Method = "GET";
-            getRequest.Headers[HttpRequestHeader.Authorization] = "Bearer " + _authToken.AccessToken;
-            return getRequest;
+            
+            using (HttpWebResponse response = (HttpWebResponse)await getList.GetResponseAsync())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return await reader.ReadToEndAsync();
+            }
         }
 
         public TwitterUser GetUserInformation(string username)
@@ -133,6 +121,14 @@ namespace CognitiveExample.Web.Services
                 //add 404 handling
                 throw ex;
             }
+        }
+
+        private HttpWebRequest CreateMentionsGet(string username)
+        {
+            var getRequest = WebRequest.Create(_apiOptions.SearchHandlesEndpoint + "?q=@" + username + "&count=" + _apiOptions.TweetGetCount) as HttpWebRequest;
+            getRequest.Method = "GET";
+            getRequest.Headers[HttpRequestHeader.Authorization] = "Bearer " + _authToken.AccessToken;
+            return getRequest;
         }
 
         private HttpWebRequest CreateUserInfoGet(string username)

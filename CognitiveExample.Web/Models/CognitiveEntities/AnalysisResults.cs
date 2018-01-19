@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CognitiveExample.Web.Models.CognitiveEntities
 {
-    public class AnalysisResults
+    public class AnalysisResults : IAnalysisResults
     {
         public KeyPhraseBatchResult KeyPhrases { get; set; }
         public SentimentBatchResult Sentiments { get; set; }

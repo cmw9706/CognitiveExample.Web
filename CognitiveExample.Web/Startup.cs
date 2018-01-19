@@ -14,6 +14,7 @@ using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
 using CognitiveExample.Web.Services.Abstractions;
 using CognitiveExample.Web.Services;
 using Microsoft.AspNetCore.Routing;
+using CognitiveExample.Web.Models.CognitiveEntities;
 
 namespace CognitiveExample.Web
 {
@@ -44,8 +45,12 @@ namespace CognitiveExample.Web
 
             services.AddSingleton(GetTextAnalyticsApi(textApiSettings));
 
+            services.AddTransient<IAnalysisResults, AnalysisResults>();
+            services.AddTransient<IList<Feelings>, List<Feelings>>();
+            services.AddTransient<IList<MultiLanguageInput>, List<MultiLanguageInput>>();
             services.AddTransient<IDictionary<string, string>, TweetDictionary>();
             services.AddTransient<ITextAnalysis, TextAnalysisService>();
+            
             services.AddSingleton<ITwitterService, TwitterService>();
         }
 
