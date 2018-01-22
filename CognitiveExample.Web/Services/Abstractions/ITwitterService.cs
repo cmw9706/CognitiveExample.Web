@@ -10,7 +10,7 @@ namespace CognitiveExample.Web.Services.Abstractions
     public interface ITwitterService
     {
         void GetAuthToken();
-        Task<IEnumerable<string>> GetTweetsByUserAsync(string username);
+        //Task<IEnumerable<string>> GetTweetsByUserAsync(string username);
         Task<IEnumerable<string>> GetMentionsByUserAsync(string username);
         TwitterUser GetUserInformation(string username);
     }

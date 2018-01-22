@@ -49,26 +49,6 @@ namespace CognitiveExample.Web.Services
             }
         }
 
-        public async Task<IEnumerable<string>> GetTweetsByUserAsync(string username)
-        {
-            HttpWebRequest getTimeline = CreateTweetsGet(username);
-            try
-            {
-                List<string> listOfTweets = new List<string>();
-                var response = await ExecuteGetListOfTweetsAsync(getTimeline);
-                var tweets = JsonConvert.DeserializeObject<List<Tweet>>(response);
-                foreach (var tweet in tweets)
-                {
-                    listOfTweets.Add(tweet.Text);
-                }
-                return listOfTweets;
-            }
-            catch(Exception ex) //401 (access token invalid or expired)
-            {
-                throw ex;
-            }
-        }
-
         public async Task<IEnumerable<string>> GetMentionsByUserAsync(string username)
         {
             
@@ -84,7 +64,7 @@ namespace CognitiveExample.Web.Services
                 }
                 return listOfTweets;
             }
-            catch (Exception ex) //401 (access token invalid or expired)
+            catch (Exception ex) 
             {
                 throw ex;
             }
@@ -139,21 +119,12 @@ namespace CognitiveExample.Web.Services
             return getRequest;
         }
 
-        private HttpWebRequest CreateTweetsGet(string username)
-        {
-            var getRequest = WebRequest.Create(_apiOptions.UserTimelineGetEndpoint + "?count="+_apiOptions.TweetGetCount+"&screen_name="+username+"&include_rts="+_apiOptions.IncludeRetweets+ "exclude_replies="+_apiOptions.ExcludeReplies) as HttpWebRequest;
-            getRequest.Method = "GET";
-            getRequest.Headers[HttpRequestHeader.Authorization] = "Bearer " + _authToken.AccessToken;
-            return getRequest;
-        }
-
         private HttpWebRequest CreateAuthPost()
         {
             var post = WebRequest.Create(_apiOptions.TokenEndpoint) as HttpWebRequest;
             post.Method = _httpPost;
             post.ContentType = _apiOptions.PostContentType;
-
-            post.Headers[HttpRequestHeader.Authorization] = "Basic " + _apiOptions.EncodedCredentials;
+            post.Headers[HttpRequestHeader.Authorization] = "Basic " +Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes( _apiOptions.ConsumerApiKey+":"+_apiOptions.ConsumerApiSecret));
             var reqbody = Encoding.UTF8.GetBytes(_apiOptions.AuthenticationRequestBody);
             post.ContentLength = reqbody.Length;
 

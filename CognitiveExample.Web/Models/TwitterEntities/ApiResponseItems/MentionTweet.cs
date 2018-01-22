@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CognitiveExample.Web.Models.TwitterEntities
 {
     [JsonObject]
-    public class MentionTweets : ITwitterApiResponse
+    public class MentionTweets
     {
         [JsonProperty("statuses")]
         public Tweet[] Tweets { get; set; }
