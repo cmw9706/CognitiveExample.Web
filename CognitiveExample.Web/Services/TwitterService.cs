@@ -28,10 +28,9 @@ namespace CognitiveExample.Web.Services
             _logger = logger;
         }
 
-        //TODO: Move this to startup - when singleton instance is built
         public void GetAuthToken()
         {
-            HttpWebRequest postBearer = CreateAuthPost();
+               HttpWebRequest postBearer = CreateAuthPost();
             try
             {
                 string responseBody = string.Empty;
@@ -57,7 +56,7 @@ namespace CognitiveExample.Web.Services
             {
                 List<string> listOfTweets = new List<string>();
                 var response = await ExecuteGetListOfTweetsAsync(getMentions);
-                var tweets = JsonConvert.DeserializeObject<MentionTweets>(response);
+                var tweets = JsonConvert.DeserializeObject<TweetSearchResponse>(response);
                 foreach(var tweet in tweets.Tweets)
                 {
                     listOfTweets.Add(tweet.Text);

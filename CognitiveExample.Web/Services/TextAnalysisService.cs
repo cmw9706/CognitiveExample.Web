@@ -35,7 +35,7 @@ namespace CognitiveExample.Web.Services
         {
             for(int i = 0;i < tweets.Count(); i++)
             {
-                _multiLanguageInput.Add(new MultiLanguageInput {Language = _language, Id = i.ToString(),Text = tweets.ToList()[i] });
+                _multiLanguageInput.Add(new MultiLanguageInput { Language = _language, Id = i.ToString(),Text = tweets.ToList()[i] });
                 _tweetDictionary.Add(i.ToString(), tweets.ToList()[i]);
             }
             MultiLanguageBatchInput batchInput = new MultiLanguageBatchInput(_multiLanguageInput);
@@ -79,7 +79,7 @@ namespace CognitiveExample.Web.Services
 
         private bool IsSignificant(double? score)
         {
-            if(score > .90 || score < .10)
+            if(score > .85 || score < .20)
             {
                 return true;
             }
