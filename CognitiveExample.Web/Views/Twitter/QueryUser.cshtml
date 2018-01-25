@@ -4,16 +4,18 @@
 }
 <div class="container">
     <div class="jumbotron">
-        <h2>Welcome to Cogi-Tweet</h2>
-        <p>Simply type in a users twitter handle to analyze their attitudes towards things expressed in their tweets</p>
+        <h2>Tweets</h2>
+        <p>Analyze tweets a profile is mentioned in by searching their handle.</p>
     </div>
     <form class="form" method="post">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="form-group">
-                    <label class="control-label col-md-3">Twitter Handle</label>
-                    <div class="input-group col-md-5">
-                        <input class="form-control" asp-for="TwitterHandle" type="text" />
+                    <div class="row">
+                        <label class="control-label col-md-3">Twitter Handle</label>
+                        <div class="input-group col-md-5">
+                            <input class="form-control" asp-for="TwitterHandle" type="text" />
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
