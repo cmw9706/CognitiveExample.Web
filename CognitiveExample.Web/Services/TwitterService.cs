@@ -30,7 +30,7 @@ namespace CognitiveExample.Web.Services
 
         public void GetAuthToken()
         {
-               HttpWebRequest postBearer = CreateAuthPost();
+            HttpWebRequest postBearer = CreateAuthPost();
             try
             {
                 string responseBody = string.Empty;

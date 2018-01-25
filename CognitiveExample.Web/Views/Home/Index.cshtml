@@ -1,16 +1,29 @@
-﻿@{ 
-    ViewBag.Title = "Home";
+﻿@model QueryUserViewModel
+@{
+    ViewBag.Title = "Query Twitter User";
 }
 <div class="container">
     <div class="jumbotron">
-        <h2>Cogitive Examples</h2>
-        <p>These are examples of Microsoft Cognitive Services being used to leverage social media data.</p>
+        <h2>Tweets</h2>
+        <p>Analyze tweets a profile is mentioned in by searching their handle.</p>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <a href="~/Twitter/QueryUser" class="btn btn-primary btn-block btn-lg">
-                Twitter Example
-            </a>
+    <form class="form" method="post">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="control-label col-md-3">Twitter Handle</label>
+                        <div class="input-group col-md-5">
+                            <input class="form-control" asp-for="TwitterHandle" type="text" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button asp-action="Mentions" type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Analyze Mentions
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
