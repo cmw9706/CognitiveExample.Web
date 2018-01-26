@@ -8,6 +8,6 @@ namespace CognitiveExample.Web.Services.Abstractions
 {
     public interface ITextAnalysis
     {
-        IEnumerable<Feelings> AnalyzeTweets(IEnumerable<string> tweets);
+        IEnumerable<AnalysisResult> AnalyzeTweets(IEnumerable<string> tweets);
     }
 }

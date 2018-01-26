@@ -3,7 +3,6 @@
     public enum Attitude
     {
         Positive,
-        Negative,
-        Neutral
+        Negative
     }
 }

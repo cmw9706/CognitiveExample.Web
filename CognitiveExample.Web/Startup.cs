@@ -28,7 +28,7 @@ namespace CognitiveExample.Web
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true); ;
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -46,8 +46,8 @@ namespace CognitiveExample.Web
 
             services.AddSingleton(GetTextAnalyticsApi(textApiSettings));
 
-            services.AddTransient<IAnalysisResults, AnalysisResults>();
-            services.AddTransient<IList<Feelings>, List<Feelings>>();
+            //services.AddTransient<IAnalysisResults, AnalysisResults>();
+            services.AddTransient<IList<AnalysisResult>, List<AnalysisResult>>();
             services.AddTransient<IList<MultiLanguageInput>, List<MultiLanguageInput>>();
             services.AddTransient<IDictionary<string, string>, TweetDictionary>();
             services.AddTransient<ITextAnalysis, TextAnalysisService>();

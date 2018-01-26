@@ -22,9 +22,9 @@ namespace CognitiveExample.Web.Controllers
             _twitterService = twitterService;
             _logger = logger;
         }
+
         public IActionResult Index()
         {
-            _twitterService.GetAuthToken();
             var model = new QueryUserViewModel();
             return View(model);
         }
@@ -32,48 +32,29 @@ namespace CognitiveExample.Web.Controllers
         [HttpPost]
         public IActionResult Mentions(QueryUserViewModel queryUserViewModel)
         {
-            var user = _twitterService.GetUserInformation(queryUserViewModel.TwitterHandle);
-
-            if (!object.ReferenceEquals(null, user))
+            if (ModelState.IsValid)
             {
                 var model = new AnalysisViewModel
                 {
-                    Name = user.Name,
-                    Username = user.Username,
-                    ProfileImageUrl = user.ProfilePictureUrl
+                    Username = queryUserViewModel.TwitterHandle
                 };
 
-                if (ModelState.IsValid)
-                {
-                    var tweets = _twitterService.GetMentionsByUserAsync(user.Username).Result;
+                var tweets = _twitterService.GetTweetsAsync(queryUserViewModel.TwitterHandle).Result;
 
-                    if (tweets.ToList().Count() != 0)
-                    {
-                        try
-                        {
-                            model.Feelings = _textAnalysis.AnalyzeTweets(tweets);
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogError(ex, "Failure to extract sentiments from text");
-                            throw ex;
-                        }
-                    }
-                    else
-                    {
-                        model.Feelings = new List<Feelings>();
-                    }
-
-                    return View(model);
-                }
-                else
+                try
                 {
-                    return BadRequest();
+                    model.AnalysisResults = _textAnalysis.AnalyzeTweets(tweets);
                 }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+
+                return View(model);
             }
             else
             {
-                return NotFound();
+                return BadRequest();
             }
         }
 

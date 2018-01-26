@@ -4,14 +4,11 @@
 <div class="container">
     <div class="row">
         <div class="col-md-7">
-            <h2>@Model.Name - @Model.Username</h2>
-        </div>
-        <div class="col-md-3">
-            <img src="@Model.ProfileImageUrl" />
+            <h2> @Model.Username</h2>
         </div>
     </div>
 
-    @foreach (var feeling in Model.Feelings)
+    @foreach (var feeling in Model.AnalysisResults)
     {
         @if (feeling.AttitudeTowards.Equals(Attitude.Positive))
         {
@@ -26,7 +23,7 @@
                         </div>
                         <div class="col-md-3">
                             <b>Key Phrases</b>
-                            @foreach (var thing in feeling.ThingFeltFor)
+                            @foreach (var thing in feeling.KeyPhrases)
                             {
                                 <div>
                                     @thing
@@ -50,7 +47,7 @@
                         </div>
                         <div class="col-md-3">
                             <b>Key Phrases</b>
-                            @foreach (var thing in feeling.ThingFeltFor)
+                            @foreach (var thing in feeling.KeyPhrases)
                             {
                                 <div>
                                     @thing

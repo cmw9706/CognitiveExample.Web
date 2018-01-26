@@ -9,9 +9,7 @@ namespace CognitiveExample.Web.ViewModel
 {
     public class AnalysisViewModel
     {
-        public string Name { get; set; }
         public string Username { get; set; }
-        public string ProfileImageUrl { get; set; }
-        public IEnumerable<Feelings> Feelings { get; set; }
+        public IEnumerable<AnalysisResult> AnalysisResults { get; set; }
     }
 }
