@@ -33,10 +33,12 @@ namespace CognitiveExample.Web.Services
 
             MultiLanguageBatchInput batchInput = new MultiLanguageBatchInput(_multiLanguageInput);
 
-            return GetAnalysisResults(batchInput).Result;
+            var analysisResults = GetAnalysisResultsAsync(batchInput).Result;
+
+            return analysisResults;
         }
 
-        private async Task<IEnumerable<AnalysisResult>> GetAnalysisResults(MultiLanguageBatchInput batchInput)
+        private async Task<IEnumerable<AnalysisResult>> GetAnalysisResultsAsync(MultiLanguageBatchInput batchInput)
         {
             KeyPhraseBatchResult keyPhraseBatchResult = await _textAnalyticsAPI.KeyPhrasesAsync(batchInput);
             SentimentBatchResult sentimentBatchResult = await _textAnalyticsAPI.SentimentAsync(batchInput);
@@ -58,7 +60,7 @@ namespace CognitiveExample.Web.Services
                     AnalysisResult analysisResult = new AnalysisResult
                     {
                         KeyPhrases =keyPhrase.KeyPhrases,
-                        AttitudeTowards = DeriveAttitude(sentiment.Score),
+                        Attitude = DeriveAttitude(sentiment.Score),
                         Tweet = tweet
                     };
 

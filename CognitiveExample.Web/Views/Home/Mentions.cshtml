@@ -10,7 +10,7 @@
 
     @foreach (var feeling in Model.AnalysisResults)
     {
-        @if (feeling.AttitudeTowards.Equals(Attitude.Positive))
+        @if (feeling.Attitude.Equals(Attitude.Positive))
         {
             <div class="panel panel-success">
                 <div class="panel-heading">Positive Tweet</div>
@@ -23,10 +23,10 @@
                         </div>
                         <div class="col-md-3">
                             <b>Key Phrases</b>
-                            @foreach (var thing in feeling.KeyPhrases)
+                            @foreach (var phrase in feeling.KeyPhrases)
                             {
                                 <div>
-                                    @thing
+                                    @phrase
                                 </div>
                             }
                         </div>
@@ -47,10 +47,10 @@
                         </div>
                         <div class="col-md-3">
                             <b>Key Phrases</b>
-                            @foreach (var thing in feeling.KeyPhrases)
+                            @foreach (var phrase in feeling.KeyPhrases)
                             {
                                 <div>
-                                    @thing
+                                    @phrase
                                 </div>
                             }
                         </div>

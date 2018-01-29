@@ -24,7 +24,7 @@ namespace CognitiveExample.Web.UnitTest.Services
                 ConsumerApiKey = "iTQBPk2bYJvyFwC6BWGT38jSy",
                 ConsumerApiSecret = "RYld6Et7T9n7MFP3QXKhVR1YjvHHnUnZAv9Ggsxu96oDHX79CA"
             };
-            _twitterService = new TwitterService(Options.Create(_apiCollection), logger.Object);
+            _twitterService = new TwitterService(Options.Create(_apiCollection));
         }
     }
 }
