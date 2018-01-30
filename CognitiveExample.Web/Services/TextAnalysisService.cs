@@ -28,7 +28,12 @@ namespace CognitiveExample.Web.Services
         {
             for(int i = 0;i < tweets.Count(); i++)
             {
-                _multiLanguageInput.Add(new MultiLanguageInput { Language = _language, Id = i.ToString(),Text = tweets.ToList()[i] });
+                _multiLanguageInput.Add(new MultiLanguageInput
+                {
+                    Language = _language,
+                    Id = i.ToString(),
+                    Text = tweets.ToList()[i]
+                });
             }
 
             MultiLanguageBatchInput batchInput = new MultiLanguageBatchInput(_multiLanguageInput);
