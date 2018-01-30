@@ -18,8 +18,4 @@
     <ProjectReference Include="..\CognitiveExample.Web\CognitiveExample.Web.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
