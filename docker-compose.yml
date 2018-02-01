@@ -1,8 +1,0 @@
-version: '3'
-
-services:
-  cognitiveexample.web:
-    image: cognitiveexample.web
-    build:
-      context: ./CognitiveExample.Web
-      dockerfile: Dockerfile
